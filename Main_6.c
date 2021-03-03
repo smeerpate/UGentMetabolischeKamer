@@ -133,7 +133,7 @@ void mainStateMachine(void)
                         mawAdcMeasurements[1] = ads1120_getConversionResult();
                         biItsAcqBusy = false;
                         // ...calculate temperature and start TC measurement now we have a recent TC and ITS value.
-                        miCurrTempDegCx10 = TempSensor_CalculateTempCx10((int)mawAdcMeasurements[0], (int)mawAdcMeasurements[1]);
+                        miCurrTempDegCx10 = TempSensor_CalculateTempCx10((int)mawAdcMeasurements[0], mawAdcMeasurements[1]);
                         eState = S_UPDATE_DISP1;
                         //break;
                     }

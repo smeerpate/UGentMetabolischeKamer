@@ -59,7 +59,7 @@ int TempSensor_KTcVoltToTemp(long lVoltageMicroV)
 
     for(iLUTIdxCnt = 0; iLUTIdxCnt < TC_LUTENTRIES; iLUTIdxCnt++)
     {
-        if(lVoltageMicroV > malKTcVoltLUT[iLUTIdxCnt])
+        if(malKTcVoltLUT[iLUTIdxCnt] > lVoltageMicroV)
         {
             break;
         }
