@@ -127,7 +127,7 @@ void InitGpio(void)
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D5
 	//-----------------------------------------------------------------------------------------------------
 	GpioCtrlRegs.GPAGMUX2.bit.GPIO16 = 0;		// 0|0=GPIO  0|1=SPISIMOA     0|2=CANTXB       0|3=OUTPUTXBAR7
-	GpioCtrlRegs.GPAMUX2.bit.GPIO16  = 0;		// 1|0=GPIO  1|1=EPWM9A       1|2=rsvd         1|3=SD1_D1
+	GpioCtrlRegs.GPAMUX2.bit.GPIO16  = 1;		// 1|0=GPIO  1|1=EPWM9A       1|2=rsvd         1|3=SD1_D1
 												// 2|0=GPIO  2|1=rsvd         2|2=rsvd         2|3=rsvd
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D4
 	//-----------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ void InitGpio(void)
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D3
 	//-----------------------------------------------------------------------------------------------------
 	GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 0;		// 0|0=GPIO  0|1=SPICLKA      0|2=SCITXDB      0|3=CANRXA
-	GpioCtrlRegs.GPAMUX2.bit.GPIO18  = 0;		// 1|0=GPIO  1|1=EPWM10A      1|2=rsvd         1|3=SD1_D2
+	GpioCtrlRegs.GPAMUX2.bit.GPIO18  = 1;		// 1|0=GPIO  1|1=EPWM10A      1|2=rsvd         1|3=SD1_D2
 												// 2|0=GPIO  2|1=rsvd         2|2=rsvd         2|3=rsvd
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D2
 	//-----------------------------------------------------------------------------------------------------
@@ -358,8 +358,8 @@ void InitGpio(void)
 												// 2|0=GPIO  2|1=rsvd         2|2=rsvd         2|3=rsvd
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=SPISIMOA
 	//-----------------------------------------------------------------------------------------------------
-	GpioCtrlRegs.GPBGMUX2.bit.GPIO59 = 0;		// 0|0=GPIO  0|1=MFSRA        0|2=EM1D25       0|3=EM2D9
-	GpioCtrlRegs.GPBMUX2.bit.GPIO59  = 0;		// 1|0=GPIO  1|1=OUTPUTXBAR2  1|2=SPISTEBn     1|3=SD2_C2
+	GpioCtrlRegs.GPBGMUX2.bit.GPIO59 = 3;		// 0|0=GPIO  0|1=MFSRA        0|2=EM1D25       0|3=EM2D9
+	GpioCtrlRegs.GPBMUX2.bit.GPIO59  = 3;		// 1|0=GPIO  1|1=OUTPUTXBAR2  1|2=SPISTEBn     1|3=SD2_C2
 												// 2|0=GPIO  2|1=rsvd         2|2=rsvd         2|3=rsvd
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=SPISOMIA
 	//-----------------------------------------------------------------------------------------------------
@@ -979,6 +979,7 @@ void InitGpio(void)
 	// Buttons
 	// GPIO25 is an input (connected to button) -> already set in line 39
 	// GPIO26 is an input (connected to button) -> already set in line 39
+	// Enable pull-ups also already done
 
 	// Seven segment Display 1
 	GpioCtrlRegs.GPAPUD.bit.GPIO4 = 0;          //disable pull-up
@@ -999,6 +1000,12 @@ void InitGpio(void)
     GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;          //set GPIO as output
 //    GpioCtrlRegs.GPAQSEL1.bit.GPIO6 = 3;        //Asynch input GPIOxx
 //    GpioCtrlRegs.GPAQSEL1.bit.GPIO5 = 3;        //Asynch input GPIOxx
+
+    // Spi
+    GpioCtrlRegs.GPBQSEL2.bit.GPIO59 = 3;       // Asynch input GPIO59 (MISO)
+    GpioCtrlRegs.GPADIR.bit.GPIO18 = 1;         // GPIO18 (CLK) is output
+    GpioCtrlRegs.GPADIR.bit.GPIO16 = 1;         // GPIO16 (MOSI) is output
+    GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;         // GPIO19 (CS) is output
 
 
 //--- Enable the register locks for all ports

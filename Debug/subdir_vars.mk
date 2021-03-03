@@ -27,6 +27,7 @@ C_SRCS += \
 ../PieCtrl.c \
 ../PieVect.c \
 ../SineTable.c \
+../Spi.c \
 ../SysCtrl.c \
 ../TempSensor.c \
 ../Watchdog.c \
@@ -50,6 +51,7 @@ C_DEPS += \
 ./PieCtrl.d \
 ./PieVect.d \
 ./SineTable.d \
+./Spi.d \
 ./SysCtrl.d \
 ./TempSensor.d \
 ./Watchdog.d \
@@ -75,6 +77,7 @@ OBJS += \
 ./PieCtrl.obj \
 ./PieVect.obj \
 ./SineTable.obj \
+./Spi.obj \
 ./SysCtrl.obj \
 ./TempSensor.obj \
 ./Watchdog.obj \
@@ -104,6 +107,7 @@ OBJS__QUOTED += \
 "PieCtrl.obj" \
 "PieVect.obj" \
 "SineTable.obj" \
+"Spi.obj" \
 "SysCtrl.obj" \
 "TempSensor.obj" \
 "Watchdog.obj" \
@@ -127,6 +131,7 @@ C_DEPS__QUOTED += \
 "PieCtrl.d" \
 "PieVect.d" \
 "SineTable.d" \
+"Spi.d" \
 "SysCtrl.d" \
 "TempSensor.d" \
 "Watchdog.d" \
@@ -154,6 +159,7 @@ C_SRCS__QUOTED += \
 "../PieCtrl.c" \
 "../PieVect.c" \
 "../SineTable.c" \
+"../Spi.c" \
 "../SysCtrl.c" \
 "../TempSensor.c" \
 "../Watchdog.c" \

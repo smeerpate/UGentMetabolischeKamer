@@ -10,6 +10,7 @@
 #include "ads1120.h"
 #include "buttons.h"
 #include "Delay.h"
+#include "Spi.h"
 
 //--- Macro's
 #define DEBOUNCE_TIME       1 // 10ms
@@ -65,9 +66,10 @@ void main(void)
 //    InitEPwm();                         // Initialize the EPwm (FILE: EPwm.c)
 
 //--- init software components
+	spi_init();
     sevenSeg_init();
     sevenSeg_clear(1);
-    delay_ms(1000);
+    delay_ms(200);
     sevenSeg_writeDisco(1);
     sevenSeg_clear(2);
     sevenSeg_writeDisco(2);
@@ -130,7 +132,7 @@ void mainStateMachine(void)
                         // ITS conversion is ready, read and save value and...
                         mawAdcMeasurements[1] = ads1120_getConversionResult();
                         biItsAcqBusy = false;
-                        // ...calculate temperature and start TC measurement
+                        // ...calculate temperature and start TC measurement now we have a recent TC and ITS value.
                         miCurrTempDegCx10 = TempSensor_CalculateTempCx10((int)mawAdcMeasurements[0], (int)mawAdcMeasurements[1]);
                         eState = S_UPDATE_DISP1;
                         //break;
