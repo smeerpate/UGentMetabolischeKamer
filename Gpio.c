@@ -967,14 +967,14 @@ void InitGpio(void)
 	//-----------------------------------------------------------------------------------------------------
 
 //--- Select pin configurations
-	GpioCtrlRegs.GPBDIR.bit.GPIO34 = 1;			// GPIO34 is an output (connected to LED)
-	GpioDataRegs.GPBSET.bit.GPIO34 = 1;			// GPIO34 pin is set to 1 (turn LED on)
+	GpioCtrlRegs.GPBDIR.bit.LED_GREEN = 1;			// GPIO34 is an output (connected to LED)
+	GpioDataRegs.GPBSET.bit.LED_GREEN = 1;			// GPIO34 pin is set to 1 (turn LED on)
 	//GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;			// GPIO19 is an output (used in Lab 6)
 	//GpioDataRegs.GPASET.bit.GPIO19 = 1;			// GPIO19 pin is set to 1 (used in Lab 6 - pin high)
 	//GpioCtrlRegs.GPADIR.bit.GPIO18 = 1;			// GPIO18 is an output (used in Lab 6 - pin toggle)
     //GpioCtrlRegs.GPACSEL4.bit.GPIO31 = 2;       // GPIO31 is controlled by CPU2 (used in Lab 11)
-	//GpioCtrlRegs.GPADIR.bit.GPIO31 = 1;			// GPIO31 is an output (used in Lab 11 - connected to LED)
-	//GpioDataRegs.GPASET.bit.GPIO31 = 1;			// GPIO31 pin is set to 1 (used in Lab 11 - turn LED on)
+	GpioCtrlRegs.GPADIR.bit.GPIO31 = 1;			// GPIO31 is an output (used in Lab 11 - connected to LED)
+	GpioDataRegs.GPASET.bit.GPIO31 = 1;			// GPIO31 pin is set to 1 (used in Lab 11 - turn LED on)
 
 	// Buttons
 	// GPIO25 is an input (connected to button) -> already set in line 39
@@ -982,30 +982,34 @@ void InitGpio(void)
 	// Enable pull-ups also already done
 
 	// Seven segment Display 1
-	GpioCtrlRegs.GPAPUD.bit.GPIO4 = 0;          //disable pull-up
-    GpioCtrlRegs.GPAPUD.bit.GPIO3 = 0;          //disable pull-up
-    GpioCtrlRegs.GPAODR.bit.GPIO4 = 1;          //enable open-drain logic
-    GpioCtrlRegs.GPAODR.bit.GPIO3 = 1;          //enable open-drain logic
-    GpioCtrlRegs.GPADIR.bit.GPIO4 = 1;          //set GPIO as output
-    GpioCtrlRegs.GPADIR.bit.GPIO3 = 1;          //set GPIO as output
-    GpioCtrlRegs.GPAQSEL1.bit.GPIO4 = 3;        //Asynch input
-    GpioCtrlRegs.GPAQSEL1.bit.GPIO3 = 3;        //Asynch input
+	GpioCtrlRegs.GPAPUD.bit.SEVENSEG_CLK_GPIO1 = 0;          //disable pull-up
+    GpioCtrlRegs.GPAPUD.bit.SEVENSEG_DIO_GPIO1 = 0;          //disable pull-up
+    GpioCtrlRegs.GPAODR.bit.SEVENSEG_CLK_GPIO1 = 1;          //enable open-drain logic
+    GpioCtrlRegs.GPAODR.bit.SEVENSEG_DIO_GPIO1 = 1;          //enable open-drain logic
+    GpioCtrlRegs.GPADIR.bit.SEVENSEG_CLK_GPIO1 = 1;          //set GPIO as output
+    GpioCtrlRegs.GPADIR.bit.SEVENSEG_DIO_GPIO1 = 1;          //set GPIO as output
+    GpioCtrlRegs.GPAQSEL1.bit.SEVENSEG_CLK_GPIO1 = 3;        //Asynch input
+    GpioCtrlRegs.GPAQSEL1.bit.SEVENSEG_DIO_GPIO1 = 3;        //Asynch input
 
 	// Seven segment Display 2
-    GpioCtrlRegs.GPAPUD.bit.GPIO6 = 1;          //disable pull-up
-    GpioCtrlRegs.GPAPUD.bit.GPIO5 = 1;          //disable pull-up
-    GpioCtrlRegs.GPAODR.bit.GPIO6 = 1;          //enable open-drain logic
-    GpioCtrlRegs.GPAODR.bit.GPIO5 = 1;          //enable open-drain logic
-    GpioCtrlRegs.GPADIR.bit.GPIO6 = 1;          //set GPIO as output
-    GpioCtrlRegs.GPADIR.bit.GPIO5 = 1;          //set GPIO as output
-//    GpioCtrlRegs.GPAQSEL1.bit.GPIO6 = 3;        //Asynch input GPIOxx
-//    GpioCtrlRegs.GPAQSEL1.bit.GPIO5 = 3;        //Asynch input GPIOxx
+    GpioCtrlRegs.GPAPUD.bit.SEVENSEG_CLK_GPIO2 = 1;          //disable pull-up
+    GpioCtrlRegs.GPAPUD.bit.SEVENSEG_DIO_GPIO2 = 1;          //disable pull-up
+    GpioCtrlRegs.GPAODR.bit.SEVENSEG_CLK_GPIO2 = 1;          //enable open-drain logic
+    GpioCtrlRegs.GPAODR.bit.SEVENSEG_DIO_GPIO2 = 1;          //enable open-drain logic
+    GpioCtrlRegs.GPADIR.bit.SEVENSEG_CLK_GPIO2 = 1;          //set GPIO as output
+    GpioCtrlRegs.GPADIR.bit.SEVENSEG_DIO_GPIO2 = 1;          //set GPIO as output
+//    GpioCtrlRegs.GPAQSEL1.bit.SEVENSEG_CLK_GPIO2 = 3;        //Asynch input GPIOxx
+//    GpioCtrlRegs.GPAQSEL1.bit.SEVENSEG_DIO_GPIO2 = 3;        //Asynch input GPIOxx
 
     // Spi
     GpioCtrlRegs.GPBQSEL2.bit.GPIO59 = 3;       // Asynch input GPIO59 (MISO)
     GpioCtrlRegs.GPADIR.bit.GPIO18 = 1;         // GPIO18 (CLK) is output
     GpioCtrlRegs.GPADIR.bit.GPIO16 = 1;         // GPIO16 (MOSI) is output
     GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;         // GPIO19 (CS) is output
+
+    // Plant
+    GpioCtrlRegs.GPADIR.bit.PLANT_REFRIGITATECTRLPIN = 1;
+    GpioCtrlRegs.GPADIR.bit.PLANT_HEATCTRLPIN = 1;
 
 
 //--- Enable the register locks for all ports

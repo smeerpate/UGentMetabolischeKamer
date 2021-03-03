@@ -11,6 +11,7 @@
 #include "buttons.h"
 #include "Delay.h"
 #include "Spi.h"
+#include "plant.h"
 
 //--- Macro's
 #define DEBOUNCE_TIME       1 // 10ms
@@ -33,9 +34,8 @@ enum eStates
 {
     S_START_TC_MEASUREMENT, // TC: Thermocouple
     S_START_ITS_MEASUREMENT, // ITS: Internal Temperature Sensor
-    S_ADC_BACKOFF, // ADC is supposed to be busy, leave it alone
-    S_ACQUIRE_CONVERSION_RESULT,
     S_CHECK_ADC,
+    S_CONTROL,
     S_UPDATE_DISP1,
     S_UPDATE_DISP2,
     S_CHECK_BUTTON
@@ -77,6 +77,8 @@ void main(void)
     ads1120_init();
     buttons_init();
 
+    plant_refrigirate(false);
+
 //--- Enable global interrupts
 	asm(" CLRC INTM, DBGM");			// Enable global interrupts and realtime debug
 
@@ -86,6 +88,7 @@ void main(void)
 		//asm(" NOP");
 	    DelayUs(10000);
 	    mainStateMachine();
+
 	}
 
 } //end of main()
@@ -97,9 +100,7 @@ void mainStateMachine(void)
     static int iDebounceCnt = 0;
     static unsigned char bSmExecCnt = 0;
     static bool biTcAcqBusy = false;
-    static unsigned char bTcAcqStartCnt = 0;
     static bool biItsAcqBusy = false;
-    static unsigned char bItsAcqStartCnt = 0;
     int iBtnState = 0;
 
     switch(eState)
@@ -107,7 +108,7 @@ void mainStateMachine(void)
         case S_CHECK_ADC:
             if(biTcAcqBusy)
             {
-                if(bSmExecCnt >= (bTcAcqStartCnt + CONVERSION_TIME))
+                if(bSmExecCnt >= CONVERSION_TIME)
                 {
                     // Thermocouple conversion is ready, read and save value and...
                     mawAdcMeasurements[0] = ads1120_getConversionResult();
@@ -127,13 +128,14 @@ void mainStateMachine(void)
             {
                 if(biItsAcqBusy)
                 {
-                    if(bSmExecCnt >= (bItsAcqStartCnt + CONVERSION_TIME))
+                    if(bSmExecCnt >= CONVERSION_TIME)
                     {
                         // ITS conversion is ready, read and save value and...
                         mawAdcMeasurements[1] = ads1120_getConversionResult();
                         biItsAcqBusy = false;
                         // ...calculate temperature and start TC measurement now we have a recent TC and ITS value.
                         miCurrTempDegCx10 = TempSensor_CalculateTempCx10((int)mawAdcMeasurements[0], mawAdcMeasurements[1]);
+                        GpioDataRegs.GPBTOGGLE.bit.LED_GREEN = 1;
                         eState = S_UPDATE_DISP1;
                         //break;
                     }
@@ -157,7 +159,7 @@ void mainStateMachine(void)
             ads1120_cfgChThermocouple();
             ads1120_startConversion();
             biTcAcqBusy = true;
-            bTcAcqStartCnt = bSmExecCnt; // set start of conversion timestamp
+            bSmExecCnt = 0; // set start of conversion timestamp
             eState = S_UPDATE_DISP1;
         break;
 
@@ -165,8 +167,23 @@ void mainStateMachine(void)
             ads1120_cfgChInternalTempSensor();
             ads1120_startConversion();
             biItsAcqBusy = true;
-            bItsAcqStartCnt = bSmExecCnt; // set start of conversion timestamp
+            bSmExecCnt = 0; // set start of conversion timestamp
             eState = S_UPDATE_DISP1;
+        break;
+
+        case S_CONTROL:
+            if(miCurrTempDegCx10 > miSetValueDegCx10)
+            {
+                // Cool down
+                plant_refrigirate(true);
+                plant_heat(false);
+            }
+            else
+            {
+                // warm up
+                plant_heat(true);
+                plant_refrigirate(false);
+            }
         break;
 
         case S_UPDATE_DISP1:

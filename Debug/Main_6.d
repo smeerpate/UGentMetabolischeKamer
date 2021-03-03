@@ -60,6 +60,7 @@ Main_6.obj: ../ads1120.h
 Main_6.obj: ../buttons.h
 Main_6.obj: ../Delay.h
 Main_6.obj: ../Spi.h
+Main_6.obj: ../plant.h
 
 ../Main_6.c: 
 D:/ti/Labs/Lab_common/include/Lab.h: 
@@ -121,3 +122,4 @@ D:/ti/Labs/Lab_common/include/F2837xD_Pie_defines.h:
 ../buttons.h: 
 ../Delay.h: 
 ../Spi.h: 
+../plant.h: 
