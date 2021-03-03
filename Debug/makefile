@@ -20,6 +20,7 @@ ORDERED_OBJS += \
 "./F2837xD_Adc.obj" \
 "./F2837xD_GlobalVariableDefs.obj" \
 "./FanSpin.obj" \
+"./Flash.obj" \
 "./Gpio.obj" \
 "./Main_6.obj" \
 "./PieCtrl.obj" \
@@ -178,8 +179,8 @@ UGentMetabolischeKamer.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Adc.obj" "CodeStartBranch.obj" "Dac.obj" "DefaultIsr_6.obj" "Delay.obj" "DelayUs.obj" "EPwm_6.obj" "F2837xD_Adc.obj" "F2837xD_GlobalVariableDefs.obj" "FanSpin.obj" "Gpio.obj" "Main_6.obj" "PieCtrl.obj" "PieVect.obj" "SineTable.obj" "Spi.obj" "SysCtrl.obj" "TempSensor.obj" "Watchdog.obj" "Xbar.obj" "ads1120.obj" "buttons.obj" "plant.obj" "sevenSegment.obj" 
-	-$(RM) "Adc.d" "Dac.d" "DefaultIsr_6.d" "Delay.d" "EPwm_6.d" "F2837xD_Adc.d" "F2837xD_GlobalVariableDefs.d" "FanSpin.d" "Gpio.d" "Main_6.d" "PieCtrl.d" "PieVect.d" "SineTable.d" "Spi.d" "SysCtrl.d" "TempSensor.d" "Watchdog.d" "Xbar.d" "ads1120.d" "buttons.d" "plant.d" "sevenSegment.d" 
+	-$(RM) "Adc.obj" "CodeStartBranch.obj" "Dac.obj" "DefaultIsr_6.obj" "Delay.obj" "DelayUs.obj" "EPwm_6.obj" "F2837xD_Adc.obj" "F2837xD_GlobalVariableDefs.obj" "FanSpin.obj" "Flash.obj" "Gpio.obj" "Main_6.obj" "PieCtrl.obj" "PieVect.obj" "SineTable.obj" "Spi.obj" "SysCtrl.obj" "TempSensor.obj" "Watchdog.obj" "Xbar.obj" "ads1120.obj" "buttons.obj" "plant.obj" "sevenSegment.obj" 
+	-$(RM) "Adc.d" "Dac.d" "DefaultIsr_6.d" "Delay.d" "EPwm_6.d" "F2837xD_Adc.d" "F2837xD_GlobalVariableDefs.d" "FanSpin.d" "Flash.d" "Gpio.d" "Main_6.d" "PieCtrl.d" "PieVect.d" "SineTable.d" "Spi.d" "SysCtrl.d" "TempSensor.d" "Watchdog.d" "Xbar.d" "ads1120.d" "buttons.d" "plant.d" "sevenSegment.d" 
 	-$(RM) "CodeStartBranch.d" "DelayUs.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

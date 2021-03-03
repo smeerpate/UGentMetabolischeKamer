@@ -26,7 +26,7 @@ Uint16 DacOutput;                       // DAC output
 
 Uint16 LoopCount;
 Uint16 mawAdcMeasurements[2] = { 0 }; // initialize global buffer for ADC measurements
-int miSetValueDegCx10 = 10;
+int miSetValueDegCx10 = 150;
 int miCurrTempDegCx10 = 0;
 
 //--- Enums
@@ -53,12 +53,19 @@ void mainDelayMs(Uint16);
 **********************************************************************/
 void main(void)
 {
+
 //--- CPU Initialization
 	InitSysCtrl();						// Initialize the CPU (FILE: SysCtrl.c)
 	InitGpio();							// Initialize the shared GPIO pins (FILE: Gpio.c)
 	InitXbar();							// Initialize the input, output & ePWM X-Bar (FILE: Xbar.c)
 	InitPieCtrl();						// Initialize and enable the PIE (FILE: PieCtrl.c)
 	InitWatchdog();						// Initialize the Watchdog Timer (FILE: WatchDog.c)
+
+
+	// Section secureRamFuncs contains user defined code that runs from CSM secured RAM
+	memcpy(&secureRamFuncs_runstart, &secureRamFuncs_loadstart, (Uint32)&secureRamFuncs_loadsize);
+	// Copy code from flash
+	InitFlash();
 
 //--- Peripheral Initialization
 //    InitAdca();                         // Initialize the ADC-A (FILE: Adc.c)
@@ -135,7 +142,6 @@ void mainStateMachine(void)
                         biItsAcqBusy = false;
                         // ...calculate temperature and start TC measurement now we have a recent TC and ITS value.
                         miCurrTempDegCx10 = TempSensor_CalculateTempCx10((int)mawAdcMeasurements[0], mawAdcMeasurements[1]);
-                        GpioDataRegs.GPBTOGGLE.bit.LED_GREEN = 1;
                         eState = S_UPDATE_DISP1;
                         //break;
                     }
@@ -171,21 +177,6 @@ void mainStateMachine(void)
             eState = S_UPDATE_DISP1;
         break;
 
-        case S_CONTROL:
-            if(miCurrTempDegCx10 > miSetValueDegCx10)
-            {
-                // Cool down
-                plant_refrigirate(true);
-                plant_heat(false);
-            }
-            else
-            {
-                // warm up
-                plant_heat(true);
-                plant_refrigirate(false);
-            }
-        break;
-
         case S_UPDATE_DISP1:
             sevenSeg_writeTemp(miCurrTempDegCx10, 1);
             eState = S_UPDATE_DISP2;
@@ -206,8 +197,8 @@ void mainStateMachine(void)
             {
                 if(iDebounceCnt >= DEBOUNCE_TIME+1)
                 {
-                    eState = S_CHECK_ADC;
-                    break;
+                    //eState = S_CHECK_ADC;
+                    //break;
                 }
                 else
                 {
@@ -226,15 +217,35 @@ void mainStateMachine(void)
                             default:
                                 break;
                         }
-                        eState = S_CHECK_ADC;
-                        break;
+                        //eState = S_CHECK_ADC;
+                        //break;
                     }
                     else
                     {
-                        eState = S_CHECK_ADC;
-                        break;
+                        //eState = S_CHECK_ADC;
+                        //break;
                     }
                 }
+            }
+            eState = S_CONTROL;
+        break;
+
+        case S_CONTROL:
+            if(miCurrTempDegCx10 > miSetValueDegCx10)
+            {
+                // Cool down
+                plant_refrigirate(true);
+                plant_heat(false);
+                GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                GpioDataRegs.GPBSET.bit.LED_RED = 1;
+            }
+            else
+            {
+                // warm up
+                plant_heat(true);
+                plant_refrigirate(false);
+                GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                GpioDataRegs.GPASET.bit.LED_BLUE = 1;
             }
             eState = S_CHECK_ADC;
         break;

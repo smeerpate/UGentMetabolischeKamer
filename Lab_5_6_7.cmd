@@ -41,13 +41,13 @@ SECTIONS
 /*** Compiler Required Sections ***/
 
   /* Program memory (PAGE 0) sections */
-   .text               : > RAMGS0123,             PAGE = 0
-   .cinit              : > RAMGS0123,             PAGE = 0
-   .const              : > RAMGS0123,             PAGE = 0
-   .econst             : > RAMGS0123,             PAGE = 0      
-   .pinit              : > RAMGS0123,             PAGE = 0
+   .text               : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
+   .cinit              : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
+   .const              : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
+   .econst             : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
+   .pinit              : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
    .reset              : > RESET,                 PAGE = 0, TYPE = DSECT  /* Not using the .reset section */
-   .switch             : > RAMGS0123,             PAGE = 0
+   .switch             : > FLASH_BCDEFGHIJKLMN/*RAMGS0123*/,             PAGE = 0
 
   /* Data Memory (PAGE 1) sections */
    .bss                : > RAMM0,                 PAGE = 1
@@ -58,7 +58,15 @@ SECTIONS
    .esysmem            : > RAMM1,                 PAGE = 1
 
 /*** User Defined Sections ***/
-   codestart          : > BEGIN_M0,              PAGE = 0                /* Used by file CodeStartBranch.asm */
+   codestart          : > BEGIN_FLASH/*BEGIN_M0*/,              PAGE = 0                /* Used by file CodeStartBranch.asm */
+
+/* Section secureRamFuncs used by file Flash.c. */
+   secureRamFuncs      :  LOAD = FLASH_BCDEFGHIJKLMN, PAGE = 0            /* Load to flash, run from DCSM secure RAM */
+                          RUN = RAMLS5,               PAGE = 0
+                          LOAD_START(_secureRamFuncs_loadstart),
+                          LOAD_SIZE(_secureRamFuncs_loadsize),
+                          RUN_START(_secureRamFuncs_runstart)
+
 }
 
 /******************* end of file ************************/

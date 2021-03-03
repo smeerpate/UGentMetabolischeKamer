@@ -22,6 +22,7 @@ C_SRCS += \
 ../F2837xD_Adc.c \
 ../F2837xD_GlobalVariableDefs.c \
 ../FanSpin.c \
+../Flash.c \
 ../Gpio.c \
 ../Main_6.c \
 ../PieCtrl.c \
@@ -46,6 +47,7 @@ C_DEPS += \
 ./F2837xD_Adc.d \
 ./F2837xD_GlobalVariableDefs.d \
 ./FanSpin.d \
+./Flash.d \
 ./Gpio.d \
 ./Main_6.d \
 ./PieCtrl.d \
@@ -72,6 +74,7 @@ OBJS += \
 ./F2837xD_Adc.obj \
 ./F2837xD_GlobalVariableDefs.obj \
 ./FanSpin.obj \
+./Flash.obj \
 ./Gpio.obj \
 ./Main_6.obj \
 ./PieCtrl.obj \
@@ -102,6 +105,7 @@ OBJS__QUOTED += \
 "F2837xD_Adc.obj" \
 "F2837xD_GlobalVariableDefs.obj" \
 "FanSpin.obj" \
+"Flash.obj" \
 "Gpio.obj" \
 "Main_6.obj" \
 "PieCtrl.obj" \
@@ -126,6 +130,7 @@ C_DEPS__QUOTED += \
 "F2837xD_Adc.d" \
 "F2837xD_GlobalVariableDefs.d" \
 "FanSpin.d" \
+"Flash.d" \
 "Gpio.d" \
 "Main_6.d" \
 "PieCtrl.d" \
@@ -154,6 +159,7 @@ C_SRCS__QUOTED += \
 "../F2837xD_Adc.c" \
 "../F2837xD_GlobalVariableDefs.c" \
 "../FanSpin.c" \
+"../Flash.c" \
 "../Gpio.c" \
 "../Main_6.c" \
 "../PieCtrl.c" \

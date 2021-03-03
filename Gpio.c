@@ -967,14 +967,14 @@ void InitGpio(void)
 	//-----------------------------------------------------------------------------------------------------
 
 //--- Select pin configurations
-	GpioCtrlRegs.GPBDIR.bit.LED_GREEN = 1;			// GPIO34 is an output (connected to LED)
-	GpioDataRegs.GPBSET.bit.LED_GREEN = 1;			// GPIO34 pin is set to 1 (turn LED on)
 	//GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;			// GPIO19 is an output (used in Lab 6)
 	//GpioDataRegs.GPASET.bit.GPIO19 = 1;			// GPIO19 pin is set to 1 (used in Lab 6 - pin high)
 	//GpioCtrlRegs.GPADIR.bit.GPIO18 = 1;			// GPIO18 is an output (used in Lab 6 - pin toggle)
     //GpioCtrlRegs.GPACSEL4.bit.GPIO31 = 2;       // GPIO31 is controlled by CPU2 (used in Lab 11)
-	GpioCtrlRegs.GPADIR.bit.GPIO31 = 1;			// GPIO31 is an output (used in Lab 11 - connected to LED)
-	GpioDataRegs.GPASET.bit.GPIO31 = 1;			// GPIO31 pin is set to 1 (used in Lab 11 - turn LED on)
+	GpioCtrlRegs.GPBDIR.bit.LED_RED = 1;			// GPIO31 is an output (used in Lab 11 - connected to LED)
+	GpioDataRegs.GPBSET.bit.LED_RED = 1;			// GPIO31 pin is set to 1 (used in Lab 11 - turn LED on)
+	GpioCtrlRegs.GPADIR.bit.LED_BLUE = 1;            // GPIO31 is an output (used in Lab 11 - connected to LED)
+	GpioDataRegs.GPASET.bit.LED_BLUE = 1;            // GPIO31 pin is set to 1 (used in Lab 11 - turn LED on)
 
 	// Buttons
 	// GPIO25 is an input (connected to button) -> already set in line 39
