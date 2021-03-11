@@ -1,10 +1,10 @@
 ******************************************************************************
              TMS320C2000 Linker PC v20.2.1                     
 ******************************************************************************
->> Linked Wed Mar  3 16:08:00 2021
+>> Linked Thu Mar 11 23:08:13 2021
 
 OUTPUT FILE NAME:   <UGentMetabolischeKamer.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 000839f8
+ENTRY POINT SYMBOL: "_c_int00"  address: 000839fa
 
 
 MEMORY CONFIGURATION
@@ -18,7 +18,7 @@ PAGE 0:
   RAMGS0123             0000c000   00004000  00000000  00004000  RWIX
   BEGIN_FLASH           00080000   00000002  00000002  00000000  RWIX
   FLASH_A               00080002   00001ffe  00000000  00001ffe  RWIX
-  FLASH_BCDEFGHIJKLMN   00082000   0003e000  00001e3c  0003c1c4  RWIX
+  FLASH_BCDEFGHIJKLMN   00082000   0003e000  00001e42  0003c1be  RWIX
   RESET                 003fffc0   00000002  00000000  00000002  R   
 
 PAGE 1:
@@ -539,50 +539,50 @@ CpuSysRegsFile
 *          1    0005d300    00000082     UNINITIALIZED
                   0005d300    00000082     F2837xD_GlobalVariableDefs.obj (CpuSysRegsFile)
 
-.text      0    00082000    00001bb6     
+.text      0    00082000    00001bbc     
                   00082000    00000840     Xbar.obj (.text)
                   00082840    000007fa     DefaultIsr_6.obj (.text:retain)
-                  0008303a    00000398     Gpio.obj (.text)
-                  000833d2    000001bb     sevenSegment.obj (.text)
-                  0008358d    00000119     TempSensor.obj (.text)
-                  000836a6    000000ff     ads1120.obj (.text)
-                  000837a5    000000f9     Main_6.obj (.text)
-                  0008389e    000000d2     SysCtrl.obj (.text)
-                  00083970    00000088     rts2800_fpu32.lib : fs_div28.asm.obj (.text)
-                  000839f8    00000056                       : boot28.asm.obj (.text)
-                  00083a4e    0000002d     PieCtrl.obj (.text)
-                  00083a7b    00000029     rts2800_fpu32.lib : exit.c.obj (.text)
-                  00083aa4    00000024                       : cpy_tbl.c.obj (.text)
-                  00083ac8    00000022     plant.obj (.text)
-                  00083aea    00000022     rts2800_fpu32.lib : i_div28.asm.obj (.text)
-                  00083b0c    0000001d     Spi.obj (.text)
-                  00083b29    0000001d     rts2800_fpu32.lib : memcpy.c.obj (.text)
-                  00083b46    00000012                       : args_main.c.obj (.text)
-                  00083b58    00000011     buttons.obj (.text)
-                  00083b69    00000010     DelayUs.obj (.text)
-                  00083b79    00000010     Watchdog.obj (.text)
-                  00083b89    0000000f     Delay.obj (.text)
-                  00083b98    0000000b     rts2800_fpu32.lib : u_div28.asm.obj (.text)
-                  00083ba3    00000009                       : _lock.c.obj (.text)
-                  00083bac    00000007     CodeStartBranch.obj (.text)
-                  00083bb3    00000002     rts2800_fpu32.lib : pre_init.c.obj (.text)
-                  00083bb5    00000001                       : startup.c.obj (.text)
+                  0008303a    0000039a     Gpio.obj (.text)
+                  000833d4    000001bb     sevenSegment.obj (.text)
+                  0008358f    00000119     TempSensor.obj (.text)
+                  000836a8    000000ff     ads1120.obj (.text)
+                  000837a7    000000f9     Main_6.obj (.text)
+                  000838a0    000000d2     SysCtrl.obj (.text)
+                  00083972    00000088     rts2800_fpu32.lib : fs_div28.asm.obj (.text)
+                  000839fa    00000056                       : boot28.asm.obj (.text)
+                  00083a50    0000002d     PieCtrl.obj (.text)
+                  00083a7d    00000029     rts2800_fpu32.lib : exit.c.obj (.text)
+                  00083aa6    00000024                       : cpy_tbl.c.obj (.text)
+                  00083aca    00000022     plant.obj (.text)
+                  00083aec    00000022     rts2800_fpu32.lib : i_div28.asm.obj (.text)
+                  00083b0e    0000001d     Spi.obj (.text)
+                  00083b2b    0000001d     rts2800_fpu32.lib : memcpy.c.obj (.text)
+                  00083b48    00000015     buttons.obj (.text)
+                  00083b5d    00000012     rts2800_fpu32.lib : args_main.c.obj (.text)
+                  00083b6f    00000010     DelayUs.obj (.text)
+                  00083b7f    00000010     Watchdog.obj (.text)
+                  00083b8f    0000000f     Delay.obj (.text)
+                  00083b9e    0000000b     rts2800_fpu32.lib : u_div28.asm.obj (.text)
+                  00083ba9    00000009                       : _lock.c.obj (.text)
+                  00083bb2    00000007     CodeStartBranch.obj (.text)
+                  00083bb9    00000002     rts2800_fpu32.lib : pre_init.c.obj (.text)
+                  00083bbb    00000001                       : startup.c.obj (.text)
 
-.cinit     0    00083d9c    000000a1     
-                  00083d9c    00000024     Main_6.obj (.cinit)
-                  00083dc0    0000001c     SineTable.obj (.cinit:_QuadratureTable)
-                  00083ddc    00000015     TempSensor.obj (.cinit:_malKTcVoltLUT)
-                  00083df1    00000015     sevenSegment.obj (.cinit:_sevenSeg_numberArray)
-                  00083e06    0000000e     rts2800_fpu32.lib : exit.c.obj (.cinit)
-                  00083e14    0000000d     DefaultIsr_6.obj (.cinit)
-                  00083e21    0000000c     TempSensor.obj (.cinit:_maiKTcTempLUT)
-                  00083e2d    00000005     rts2800_fpu32.lib : _lock.c.obj (.cinit:__lock)
-                  00083e32    00000005                       : _lock.c.obj (.cinit:__unlock)
-                  00083e37    00000004     Main_6.obj (.cinit:_mawAdcMeasurements)
-                  00083e3b    00000002     --HOLE-- [fill = 0]
+.cinit     0    00083da2    000000a1     
+                  00083da2    00000024     Main_6.obj (.cinit)
+                  00083dc6    0000001c     SineTable.obj (.cinit:_QuadratureTable)
+                  00083de2    00000015     TempSensor.obj (.cinit:_malKTcVoltLUT)
+                  00083df7    00000015     sevenSegment.obj (.cinit:_sevenSeg_numberArray)
+                  00083e0c    0000000e     rts2800_fpu32.lib : exit.c.obj (.cinit)
+                  00083e1a    0000000d     DefaultIsr_6.obj (.cinit)
+                  00083e27    0000000c     TempSensor.obj (.cinit:_maiKTcTempLUT)
+                  00083e33    00000005     rts2800_fpu32.lib : _lock.c.obj (.cinit:__lock)
+                  00083e38    00000005                       : _lock.c.obj (.cinit:__unlock)
+                  00083e3d    00000004     Main_6.obj (.cinit:_mawAdcMeasurements)
+                  00083e41    00000002     --HOLE-- [fill = 0]
 
-.econst    0    00083bdc    000001c0     
-                  00083bdc    000001c0     PieVect.obj (.econst:_PieVectTableInit)
+.econst    0    00083be2    000001c0     
+                  00083be2    000001c0     PieVect.obj (.econst:_PieVectTableInit)
 
 .pinit     0    00082000    00000000     UNINITIALIZED
 
@@ -614,8 +614,8 @@ codestart
                   00080000    00000002     CodeStartBranch.obj (codestart)
 
 secureRamFuncs 
-*          0    00083bb6    00000025     RUN ADDR = 0000a800
-                  00083bb6    00000025     Flash.obj (secureRamFuncs)
+*          0    00083bbc    00000025     RUN ADDR = 0000a800
+                  00083bbc    00000025     Flash.obj (secureRamFuncs)
 
 MODULE SUMMARY
 
@@ -625,7 +625,7 @@ MODULE SUMMARY
        F2837xD_GlobalVariableDefs.obj   0      0                  8759              
        Xbar.obj                         2112   0                  0                 
        DefaultIsr_6.obj                 2042   13                 4                 
-       Gpio.obj                         920    0                  0                 
+       Gpio.obj                         922    0                  0                 
        sevenSegment.obj                 443    21                 18                
        PieVect.obj                      0      448                0                 
        Main_6.obj                       249    40                 64                
@@ -637,13 +637,13 @@ MODULE SUMMARY
        PieCtrl.obj                      45     0                  0                 
        plant.obj                        34     0                  0                 
        Spi.obj                          29     0                  0                 
-       buttons.obj                      17     0                  0                 
+       buttons.obj                      21     0                  0                 
        DelayUs.obj                      16     0                  0                 
        Watchdog.obj                     16     0                  0                 
        Delay.obj                        15     0                  0                 
        CodeStartBranch.obj              9      0                  0                 
     +--+--------------------------------+------+------------------+--------------------+
-       Total:                           6767   583                8897              
+       Total:                           6773   583                8897              
                                                                                     
     D:\ti\ccs1010\ccs\tools\compiler\ti-cgt-c2000_20.2.1.LTS\lib\rts2800_fpu32.lib
        fs_div28.asm.obj                 136    0                  0                 
@@ -662,7 +662,7 @@ MODULE SUMMARY
                                                                                     
        Stack:                           0      0                  512               
     +--+--------------------------------+------+------------------+--------------------+
-       Grand Total:                     7170   607                9419              
+       Grand Total:                     7176   607                9419              
 
 
 GLOBAL DATA SYMBOLS: SORTED BY DATA PAGE
@@ -864,7 +864,7 @@ address     data page           name
 
 00078200    1e08 (00078200)     _DcsmZ2Otp
 
-00083bdc    20ef (00083bc0)     _PieVectTableInit
+00083be2    20ef (00083bc0)     _PieVectTableInit
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -873,12 +873,12 @@ page  address   name
 ----  -------   ----                            
 1     00000050  .bss                            
 0     00082000  .text                           
-0     00083a7b  C$$EXIT                         
-0     00083970  FS$$DIV                         
-0     00083aea  I$$DIV                          
-0     00083afb  I$$MOD                          
-0     00083b98  U$$DIV                          
-0     00083b9d  U$$MOD                          
+0     00083a7d  C$$EXIT                         
+0     00083972  FS$$DIV                         
+0     00083aec  I$$DIV                          
+0     00083afd  I$$MOD                          
+0     00083b9e  U$$DIV                          
+0     00083ba3  U$$MOD                          
 0     000828fe  _ADCA1_ISR                      
 0     00082cf6  _ADCA2_ISR                      
 0     00082d04  _ADCA3_ISR                      
@@ -964,7 +964,7 @@ page  address   name
 1     0005f000  _DcsmZ1Regs                     
 1     00078200  _DcsmZ2Otp                      
 1     0005f040  _DcsmZ2Regs                     
-0     00083b69  _DelayUs                        
+0     00083b6f  _DelayUs                        
 1     0005d000  _DevCfgRegs                     
 1     00007980  _DmaClaSrcSelRegs               
 1     00001000  _DmaRegs                        
@@ -1052,9 +1052,9 @@ page  address   name
 0     00082e46  _IPC3_ISR                       
 0     0000a800  _InitFlash                      
 0     0008303a  _InitGpio                       
-0     00083a4e  _InitPieCtrl                    
-0     0008389e  _InitSysCtrl                    
-0     00083b79  _InitWatchdog                   
+0     00083a50  _InitPieCtrl                    
+0     000838a0  _InitSysCtrl                    
+0     00083b7f  _InitWatchdog                   
 0     00082000  _InitXbar                       
 1     00007900  _InputXbarRegs                  
 1     00050000  _IpcRegs                        
@@ -1073,7 +1073,7 @@ page  address   name
 0     00083030  _PIE_RESERVED_ISR               
 1     00000ce0  _PieCtrlRegs                    
 1     00000d00  _PieVectTable                   
-0     00083bdc  _PieVectTableInit               
+0     00083be2  _PieVectTableInit               
 1     00000050  _QuadratureTable                
 0     00082fea  _RAM_ACCESS_VIOLATION_ISR       
 0     00082fce  _RAM_CORRECTABLE_ERROR_ISR      
@@ -1111,10 +1111,10 @@ page  address   name
 0     000829ca  _TIMER0_ISR                     
 0     00082840  _TIMER1_ISR                     
 0     0008284a  _TIMER2_ISR                     
-0     000835ae  _TempSensor_CalculateChipTemp   
-0     0008358d  _TempSensor_CalculateTempCx10   
-0     00083639  _TempSensor_KTcTempToVolt       
-0     000835cc  _TempSensor_KTcVoltToTemp       
+0     000835b0  _TempSensor_CalculateChipTemp   
+0     0008358f  _TempSensor_CalculateTempCx10   
+0     0008363b  _TempSensor_KTcTempToVolt       
+0     000835ce  _TempSensor_KTcVoltToTemp       
 0     00082efc  _UPPA_ISR                       
 0     00082f42  _USBA_ISR                       
 0     000828e0  _USER10_ISR                     
@@ -1151,63 +1151,63 @@ abs   ffffffff  ___TI_prof_data_start
 abs   ffffffff  ___binit__                      
 1     00000050  ___bss__                        
 abs   ffffffff  ___c_args__                     
-0     00083d9c  ___cinit__                      
+0     00083da2  ___cinit__                      
 1     00000050  ___end__                        
-0     00083bb6  ___etext__                      
+0     00083bbc  ___etext__                      
 abs   ffffffff  ___pinit__                      
 0     00082000  ___text__                       
-0     00083b46  __args_main                     
+0     00083b5d  __args_main                     
 1     000000be  __lock                          
-0     00083bab  __nop                           
-0     00083ba7  __register_lock                 
-0     00083ba3  __register_unlock               
+0     00083bb1  __nop                           
+0     00083bad  __register_lock                 
+0     00083ba9  __register_unlock               
 1     00000400  __stack                         
-0     00083bb5  __system_post_cinit             
-0     00083bb3  __system_pre_init               
+0     00083bbb  __system_post_cinit             
+0     00083bb9  __system_pre_init               
 1     000000e2  __unlock                        
-0     00083a7b  _abort                          
-0     00083752  _ads1120_cfgChInternalTempSensor
-0     0008373f  _ads1120_cfgChThermocouple      
-0     00083775  _ads1120_getConversionResult    
-0     000836a6  _ads1120_init                   
-0     00083705  _ads1120_readInternalTempSensor 
-0     000836cb  _ads1120_readThermocouple       
-0     00083799  _ads1120_spi_xmit               
-0     00083765  _ads1120_startConversion        
-0     00083b5a  _buttons_checkPress             
-0     00083b58  _buttons_init                   
-0     000839f8  _c_int00                        
-0     00083aa4  _copy_in                        
-0     00083b89  _delay_ms                       
-0     00083a7d  _exit                           
+0     00083a7d  _abort                          
+0     00083754  _ads1120_cfgChInternalTempSensor
+0     00083741  _ads1120_cfgChThermocouple      
+0     00083777  _ads1120_getConversionResult    
+0     000836a8  _ads1120_init                   
+0     00083707  _ads1120_readInternalTempSensor 
+0     000836cd  _ads1120_readThermocouple       
+0     0008379b  _ads1120_spi_xmit               
+0     00083767  _ads1120_startConversion        
+0     00083b4a  _buttons_checkPress             
+0     00083b48  _buttons_init                   
+0     000839fa  _c_int00                        
+0     00083aa6  _copy_in                        
+0     00083b8f  _delay_ms                       
+0     00083a7f  _exit                           
 1     000000d2  _maiKTcTempLUT                  
-0     000837a5  _main                           
-0     000837de  _mainStateMachine               
+0     000837a7  _main                           
+0     000837e0  _mainStateMachine               
 1     0000006a  _malKTcVoltLUT                  
 1     000000e4  _mawAdcMeasurements             
-0     00083b29  _memcpy                         
+0     00083b2b  _memcpy                         
 1     000000b8  _miCurrTempDegCx10              
 1     000000b7  _miSetValueDegCx10              
-0     00083ad9  _plant_heat                     
-0     00083ac8  _plant_refrigirate              
+0     00083adb  _plant_heat                     
+0     00083aca  _plant_refrigirate              
 abs   00000025  _secureRamFuncs_loadsize        
-0     00083bb6  _secureRamFuncs_loadstart       
+0     00083bbc  _secureRamFuncs_loadstart       
 0     0000a800  _secureRamFuncs_runstart        
-0     000833e4  _sevenSeg_clear                 
-0     000833d2  _sevenSeg_init                  
+0     000833e6  _sevenSeg_clear                 
+0     000833d4  _sevenSeg_init                  
 1     000000c0  _sevenSeg_numberArray           
-0     000834fb  _sevenSeg_readAck               
-0     0008352a  _sevenSeg_writeByte             
-0     00083471  _sevenSeg_writeDisco            
-0     000834ae  _sevenSeg_writeStart            
-0     000834c3  _sevenSeg_writeStop             
-0     0008340a  _sevenSeg_writeTemp             
-0     00083b0c  _spi_init                       
+0     000834fd  _sevenSeg_readAck               
+0     0008352c  _sevenSeg_writeByte             
+0     00083473  _sevenSeg_writeDisco            
+0     000834b0  _sevenSeg_writeStart            
+0     000834c5  _sevenSeg_writeStop             
+0     0008340c  _sevenSeg_writeTemp             
+0     00083b0e  _spi_init                       
 abs   ffffffff  binit                           
-0     00083d9c  cinit                           
+0     00083da2  cinit                           
 0     00080000  code_start                      
 1     00000050  end                             
-0     00083bb6  etext                           
+0     00083bbc  etext                           
 abs   ffffffff  pinit                           
 
 
@@ -1366,61 +1366,61 @@ page  address   name
 0     00083022  _CLA_UNDERFLOW_ISR              
 0     00083030  _PIE_RESERVED_ISR               
 0     0008303a  _InitGpio                       
-0     000833d2  _sevenSeg_init                  
-0     000833e4  _sevenSeg_clear                 
-0     0008340a  _sevenSeg_writeTemp             
-0     00083471  _sevenSeg_writeDisco            
-0     000834ae  _sevenSeg_writeStart            
-0     000834c3  _sevenSeg_writeStop             
-0     000834fb  _sevenSeg_readAck               
-0     0008352a  _sevenSeg_writeByte             
-0     0008358d  _TempSensor_CalculateTempCx10   
-0     000835ae  _TempSensor_CalculateChipTemp   
-0     000835cc  _TempSensor_KTcVoltToTemp       
-0     00083639  _TempSensor_KTcTempToVolt       
-0     000836a6  _ads1120_init                   
-0     000836cb  _ads1120_readThermocouple       
-0     00083705  _ads1120_readInternalTempSensor 
-0     0008373f  _ads1120_cfgChThermocouple      
-0     00083752  _ads1120_cfgChInternalTempSensor
-0     00083765  _ads1120_startConversion        
-0     00083775  _ads1120_getConversionResult    
-0     00083799  _ads1120_spi_xmit               
-0     000837a5  _main                           
-0     000837de  _mainStateMachine               
-0     0008389e  _InitSysCtrl                    
-0     00083970  FS$$DIV                         
-0     000839f8  _c_int00                        
-0     00083a4e  _InitPieCtrl                    
-0     00083a7b  C$$EXIT                         
-0     00083a7b  _abort                          
-0     00083a7d  _exit                           
-0     00083aa4  _copy_in                        
-0     00083ac8  _plant_refrigirate              
-0     00083ad9  _plant_heat                     
-0     00083aea  I$$DIV                          
-0     00083afb  I$$MOD                          
-0     00083b0c  _spi_init                       
-0     00083b29  _memcpy                         
-0     00083b46  __args_main                     
-0     00083b58  _buttons_init                   
-0     00083b5a  _buttons_checkPress             
-0     00083b69  _DelayUs                        
-0     00083b79  _InitWatchdog                   
-0     00083b89  _delay_ms                       
-0     00083b98  U$$DIV                          
-0     00083b9d  U$$MOD                          
-0     00083ba3  __register_unlock               
-0     00083ba7  __register_lock                 
-0     00083bab  __nop                           
-0     00083bb3  __system_pre_init               
-0     00083bb5  __system_post_cinit             
-0     00083bb6  ___etext__                      
-0     00083bb6  _secureRamFuncs_loadstart       
-0     00083bb6  etext                           
-0     00083bdc  _PieVectTableInit               
-0     00083d9c  ___cinit__                      
-0     00083d9c  cinit                           
+0     000833d4  _sevenSeg_init                  
+0     000833e6  _sevenSeg_clear                 
+0     0008340c  _sevenSeg_writeTemp             
+0     00083473  _sevenSeg_writeDisco            
+0     000834b0  _sevenSeg_writeStart            
+0     000834c5  _sevenSeg_writeStop             
+0     000834fd  _sevenSeg_readAck               
+0     0008352c  _sevenSeg_writeByte             
+0     0008358f  _TempSensor_CalculateTempCx10   
+0     000835b0  _TempSensor_CalculateChipTemp   
+0     000835ce  _TempSensor_KTcVoltToTemp       
+0     0008363b  _TempSensor_KTcTempToVolt       
+0     000836a8  _ads1120_init                   
+0     000836cd  _ads1120_readThermocouple       
+0     00083707  _ads1120_readInternalTempSensor 
+0     00083741  _ads1120_cfgChThermocouple      
+0     00083754  _ads1120_cfgChInternalTempSensor
+0     00083767  _ads1120_startConversion        
+0     00083777  _ads1120_getConversionResult    
+0     0008379b  _ads1120_spi_xmit               
+0     000837a7  _main                           
+0     000837e0  _mainStateMachine               
+0     000838a0  _InitSysCtrl                    
+0     00083972  FS$$DIV                         
+0     000839fa  _c_int00                        
+0     00083a50  _InitPieCtrl                    
+0     00083a7d  C$$EXIT                         
+0     00083a7d  _abort                          
+0     00083a7f  _exit                           
+0     00083aa6  _copy_in                        
+0     00083aca  _plant_refrigirate              
+0     00083adb  _plant_heat                     
+0     00083aec  I$$DIV                          
+0     00083afd  I$$MOD                          
+0     00083b0e  _spi_init                       
+0     00083b2b  _memcpy                         
+0     00083b48  _buttons_init                   
+0     00083b4a  _buttons_checkPress             
+0     00083b5d  __args_main                     
+0     00083b6f  _DelayUs                        
+0     00083b7f  _InitWatchdog                   
+0     00083b8f  _delay_ms                       
+0     00083b9e  U$$DIV                          
+0     00083ba3  U$$MOD                          
+0     00083ba9  __register_unlock               
+0     00083bad  __register_lock                 
+0     00083bb1  __nop                           
+0     00083bb9  __system_pre_init               
+0     00083bbb  __system_post_cinit             
+0     00083bbc  ___etext__                      
+0     00083bbc  _secureRamFuncs_loadstart       
+0     00083bbc  etext                           
+0     00083be2  _PieVectTableInit               
+0     00083da2  ___cinit__                      
+0     00083da2  cinit                           
 1     00000050  .bss                            
 1     00000050  _QuadratureTable                
 1     00000050  ___bss__                        

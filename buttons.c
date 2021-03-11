@@ -89,5 +89,13 @@ int buttons_checkPress()
         //}
     }
     
+    if(GpioDataRegs.GPADAT.bit.GPIO27 == BUTTONS_ACTIVELEVEL)
+    {
+        //if(XintRegs.XINT2CTR > BUTTONS_DEBOUNCETIMETICKS)
+        //{
+            iRetValue |= 0x4;
+        //}
+    }
+
     return iRetValue;
 }
