@@ -137,7 +137,7 @@ void InitGpio(void)
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D3
 	//-----------------------------------------------------------------------------------------------------
 	GpioCtrlRegs.GPAGMUX2.bit.GPIO18 = 0;		// 0|0=GPIO  0|1=SPICLKA      0|2=SCITXDB      0|3=CANRXA
-	GpioCtrlRegs.GPAMUX2.bit.GPIO18  = 0;		// 1|0=GPIO  1|1=EPWM10A      1|2=rsvd         1|3=SD1_D2
+	GpioCtrlRegs.GPAMUX2.bit.GPIO18  = 1;		// 1|0=GPIO  1|1=EPWM10A      1|2=rsvd         1|3=SD1_D2
 												// 2|0=GPIO  2|1=rsvd         2|2=rsvd         2|3=rsvd
 												// 3|0=GPIO  3|1=rsvd         3|2=rsvd         3|3=UPP-D2
 	//-----------------------------------------------------------------------------------------------------
