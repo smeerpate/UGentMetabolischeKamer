@@ -1009,8 +1009,15 @@ void InitGpio(void)
     GpioCtrlRegs.GPADIR.bit.GPIO19 = 1;         // GPIO19 (CS) is output
 
     // Plant
-    GpioCtrlRegs.GPBDIR.bit.PLANT_REFRIGITATECTRLPIN = 1;
-    GpioCtrlRegs.GPADIR.bit.PLANT_HEATCTRLPIN = 1;
+    GpioCtrlRegs.GPBDIR.bit.PLANT_REFRIGITATECTRLPIN = 1; // make output
+    GpioCtrlRegs.GPADIR.bit.PLANT_HEATCTRLPIN = 1; // make output
+
+    // UI Leds
+    GpioCtrlRegs.GPEDIR.bit.LED_ACTIVE = 1; // make output
+    GpioCtrlRegs.GPBDIR.bit.LED_HEAT = 1; // make output
+    GpioCtrlRegs.GPCDIR.bit.LED_COOL = 1; // make output
+
+
 
 
 //--- Enable the register locks for all ports

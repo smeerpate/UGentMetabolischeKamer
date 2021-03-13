@@ -71,13 +71,20 @@ int TempSensor_KTcVoltToTemp(long lVoltageMicroV)
     }
     else
     {
-        // interpolate
-        // Slope: in °Cx100/µV
-        int iDeltaV = (int)((malKTcVoltLUT[iLUTIdxCnt] - malKTcVoltLUT[iLUTIdxCnt-1]));
-        int iDeltaT = (maiKTcTempLUT[iLUTIdxCnt] - maiKTcTempLUT[iLUTIdxCnt-1]);
-        float fSlope = (float)iDeltaT / (float)iDeltaV;
-        long lVoltOffset = lVoltageMicroV - malKTcVoltLUT[iLUTIdxCnt-1];
-        iTemp = (int)((float)maiKTcTempLUT[iLUTIdxCnt-1] + (float)lVoltOffset * fSlope);
+        if(iLUTIdxCnt < 1)
+        {
+            iTemp = maiKTcTempLUT[0];
+        }
+        else
+        {
+            // interpolate
+            // Slope: in °Cx100/µV
+            int iDeltaV = (int)((malKTcVoltLUT[iLUTIdxCnt] - malKTcVoltLUT[iLUTIdxCnt-1]));
+            int iDeltaT = (maiKTcTempLUT[iLUTIdxCnt] - maiKTcTempLUT[iLUTIdxCnt-1]);
+            float fSlope = (float)iDeltaT / (float)iDeltaV;
+            long lVoltOffset = lVoltageMicroV - malKTcVoltLUT[iLUTIdxCnt-1];
+            iTemp = (int)((float)maiKTcTempLUT[iLUTIdxCnt-1] + (float)lVoltOffset * fSlope);
+        }
     }
 
     return iTemp;
@@ -102,13 +109,20 @@ long TempSensor_KTcTempToVolt(int iTempCx100)
     }
     else
     {
-        // interpolate
-        // Slope: in µV/°Cx100
-        int iDeltaV = (int)((malKTcVoltLUT[iLUTIdxCnt] - malKTcVoltLUT[iLUTIdxCnt-1]));
-        int iDeltaT = (maiKTcTempLUT[iLUTIdxCnt] - maiKTcTempLUT[iLUTIdxCnt-1]);
-        float fSlope = (float)iDeltaV / (float)iDeltaT;
-        int iTempOffset = iTempCx100 - maiKTcTempLUT[iLUTIdxCnt-1];
-        lVolt = (long)((float)malKTcVoltLUT[iLUTIdxCnt-1] + (float)iTempOffset * fSlope);
+        if(iLUTIdxCnt < 1)
+        {
+            lVolt = malKTcVoltLUT[0];
+        }
+        else
+        {
+            // interpolate
+            // Slope: in µV/°Cx100
+            int iDeltaV = (int)((malKTcVoltLUT[iLUTIdxCnt] - malKTcVoltLUT[iLUTIdxCnt-1]));
+            int iDeltaT = (maiKTcTempLUT[iLUTIdxCnt] - maiKTcTempLUT[iLUTIdxCnt-1]);
+            float fSlope = (float)iDeltaV / (float)iDeltaT;
+            int iTempOffset = iTempCx100 - maiKTcTempLUT[iLUTIdxCnt-1];
+            lVolt = (long)((float)malKTcVoltLUT[iLUTIdxCnt-1] + (float)iTempOffset * fSlope);
+        }
     }
 
     return lVolt;

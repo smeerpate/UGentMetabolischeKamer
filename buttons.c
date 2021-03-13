@@ -73,7 +73,7 @@ int buttons_init()
 int buttons_checkPress()
 {
     int iRetValue = 0;
-    if(GpioDataRegs.GPADAT.bit.GPIO25 == BUTTONS_ACTIVELEVEL)
+    if(GpioDataRegs.GPADAT.bit.GPIO27 == BUTTONS_ACTIVELEVEL) // up button
     {
         //if(XintRegs.XINT1CTR > BUTTONS_DEBOUNCETIMETICKS)
         //{
@@ -81,7 +81,7 @@ int buttons_checkPress()
         //}
     }
     
-    if(GpioDataRegs.GPADAT.bit.GPIO26 == BUTTONS_ACTIVELEVEL)
+    if(GpioDataRegs.GPADAT.bit.GPIO26 == BUTTONS_ACTIVELEVEL) // down button
     {
         //if(XintRegs.XINT2CTR > BUTTONS_DEBOUNCETIMETICKS)
         //{
@@ -89,7 +89,7 @@ int buttons_checkPress()
         //}
     }
     
-    if(GpioDataRegs.GPADAT.bit.GPIO27 == BUTTONS_ACTIVELEVEL)
+    if(GpioDataRegs.GPADAT.bit.GPIO25 == BUTTONS_ACTIVELEVEL) // Active button
     {
         //if(XintRegs.XINT2CTR > BUTTONS_DEBOUNCETIMETICKS)
         //{

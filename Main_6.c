@@ -14,8 +14,11 @@
 #include "plant.h"
 
 //--- Macro's
+#define BUILD_INFO          12
 #define DEBOUNCE_TIME       1 // 10ms
 #define CONVERSION_TIME     6 // 60ms
+#define SETTEMPCX10_MIN     -300 // deg C * 10 (e.g. -300 => -30 deg C)
+#define SETTEMPCX10_MAX     300 // deg C *10
 
 //--- Global Variables
 Uint16 DEBUG_TOGGLE = 1;                // Used for realtime mode investigation test
@@ -28,6 +31,11 @@ Uint16 LoopCount;
 Uint16 mawAdcMeasurements[2] = { 0 }; // initialize global buffer for ADC measurements
 int miSetValueDegCx10 = 150;
 int miCurrTempDegCx10 = 0;
+int miSettingTimeTempDeltaCx10 = 0;
+int miContolDeadBandCx10 = 10; // deg C * 10 (e.g. -300 => -30 deg C), temperature used while controlling the plant
+float mfDeltaFactor = 0.2;
+int miMinDeadBandDegCx10 = 2; // deg C * 10 (e.g. -300 => -30 deg C)
+bool mbiActive = false;
 
 //--- Enums
 enum eStates
@@ -76,10 +84,13 @@ void main(void)
 	spi_init();
     sevenSeg_init();
     sevenSeg_clear(1);
-    delay_ms(200);
-    sevenSeg_writeDisco(1);
+    //delay_ms(200);
+    //sevenSeg_writeDisco(1);
     sevenSeg_clear(2);
-    sevenSeg_writeDisco(2);
+    //sevenSeg_writeDisco(2);
+    sevenSeg_writeTemp(BUILD_INFO, 1); // show software version number xx.x
+    delay_ms(2000);
+
 
     ads1120_init();
     buttons_init();
@@ -99,6 +110,11 @@ void main(void)
 	}
 
 } //end of main()
+
+int mainAbs(int x)
+{
+    return ( x<0 ) ? -x : x;
+}
 
 
 void mainStateMachine(void)
@@ -209,11 +225,44 @@ void mainStateMachine(void)
                         switch(iBtnState)
                         {
                             case 1:
-                                miSetValueDegCx10 += 1;
+                                if(miSetValueDegCx10 < SETTEMPCX10_MAX)
+                                {
+                                    miSetValueDegCx10 += 1;
+                                }
+                                miSettingTimeTempDeltaCx10 = miSetValueDegCx10 - miCurrTempDegCx10; // update the setting time temperature difference
+                                miContolDeadBandCx10 = (int)((float)miSettingTimeTempDeltaCx10 * mfDeltaFactor); // Dead band calculation
+                                if(miContolDeadBandCx10 < miMinDeadBandDegCx10)
+                                {
+                                    miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                                }
                                 break;
                             case 2:
-                                miSetValueDegCx10 -= 1;
+                                if(miSetValueDegCx10 > SETTEMPCX10_MIN)
+                                {
+                                    miSetValueDegCx10 -= 1;
+                                }
+                                miSettingTimeTempDeltaCx10 = miSetValueDegCx10 - miCurrTempDegCx10; // update the setting time temperature difference
+                                miContolDeadBandCx10 = (int)((float)miSettingTimeTempDeltaCx10 * mfDeltaFactor);
+                                if(miContolDeadBandCx10 < miMinDeadBandDegCx10)
+                                {
+                                    miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                                }
                                 break;
+                            case 4:
+                                if(mbiActive == true)
+                                {
+                                    mbiActive = false;
+                                }
+                                else
+                                {
+                                    mbiActive = true;
+                                    miSettingTimeTempDeltaCx10 = miSetValueDegCx10 - miCurrTempDegCx10; // update the setting time temperature difference
+                                    miContolDeadBandCx10 = (int)((float)miSettingTimeTempDeltaCx10 * mfDeltaFactor);
+                                    if(miContolDeadBandCx10 < miMinDeadBandDegCx10)
+                                    {
+                                        miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                                    }
+                                }
                             default:
                                 break;
                         }
@@ -231,21 +280,53 @@ void mainStateMachine(void)
         break;
 
         case S_CONTROL:
-            if(miCurrTempDegCx10 > miSetValueDegCx10)
+            if(mbiActive)
             {
-                // Cool down
-                plant_refrigirate(true);
-                plant_heat(false);
-                GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
-                GpioDataRegs.GPBSET.bit.LED_RED = 1;
+                GpioDataRegs.GPESET.bit.LED_ACTIVE = 1; // LED is fixed to GND
+
+                if(miCurrTempDegCx10 > (miSetValueDegCx10 + mainAbs(miContolDeadBandCx10)))
+                {
+                    // Cool down
+                    plant_refrigirate(true);
+                    plant_heat(false);
+                    GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                    GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
+                    GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
+                    GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
+                }
+                else
+                {
+                    if(miCurrTempDegCx10 < (miSetValueDegCx10 - mainAbs(miContolDeadBandCx10)))
+                    {
+                        // warm up
+                        plant_heat(true);
+                        plant_refrigirate(false);
+                        GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                        GpioDataRegs.GPASET.bit.LED_BLUE = 1;
+                        GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
+                        GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
+                    }
+                    else
+                    {
+                        // idle
+                        plant_heat(false);
+                        plant_refrigirate(false);
+                        GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                        GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                        GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
+                        GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1;
+                    }
+                }
             }
             else
             {
-                // warm up
-                plant_heat(true);
+                plant_heat(false);
                 plant_refrigirate(false);
-                GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
-                GpioDataRegs.GPASET.bit.LED_BLUE = 1;
+                GpioDataRegs.GPASET.bit.LED_BLUE = 1; // LED is fixed to VCC
+                GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
+                GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1; // LED is fixed to GND
+                GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
+                GpioDataRegs.GPECLEAR.bit.LED_ACTIVE = 1; // LED is fixed to GND
             }
             eState = S_CHECK_ADC;
         break;
