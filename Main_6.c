@@ -14,11 +14,12 @@
 #include "plant.h"
 
 //--- Macro's
-#define BUILD_INFO          12
-#define DEBOUNCE_TIME       1 // 10ms
-#define CONVERSION_TIME     6 // 60ms
-#define SETTEMPCX10_MIN     -300 // deg C * 10 (e.g. -300 => -30 deg C)
-#define SETTEMPCX10_MAX     300 // deg C *10
+#define BUILD_INFO              14
+#define DEBOUNCE_TIME           1 // 10ms
+#define CONVERSION_TIME         6 // 60ms
+#define SETTEMPCX10_MIN         -300 // deg C * 10 (e.g. -300 => -30 deg C)
+#define SETTEMPCX10_MAX         300 // deg C *10
+#define CONTROL_DEBOUNCE_TIME   100 // 1000ms
 
 //--- Global Variables
 Uint16 DEBUG_TOGGLE = 1;                // Used for realtime mode investigation test
@@ -121,6 +122,7 @@ void mainStateMachine(void)
 {
     static enum eStates eState = S_CHECK_ADC;//S_CHECK_ADC;
     static int iDebounceCnt = 0;
+    static int iControlDebounceCnt = 0;
     static unsigned char bSmExecCnt = 0;
     static bool biTcAcqBusy = false;
     static bool biItsAcqBusy = false;
@@ -286,25 +288,39 @@ void mainStateMachine(void)
 
                 if(miCurrTempDegCx10 > (miSetValueDegCx10 + mainAbs(miContolDeadBandCx10)))
                 {
-                    // Cool down
-                    plant_refrigirate(true);
-                    plant_heat(false);
-                    GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
-                    GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
-                    GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
-                    GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
+                    if(iControlDebounceCnt >= CONTROL_DEBOUNCE_TIME)
+                    {
+                        // Cool down
+                        plant_refrigirate(true);
+                        plant_heat(false);
+                        GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                        GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
+                        GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
+                        GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
+                    }
+                    else
+                    {
+                        iControlDebounceCnt += 1;
+                    }
                 }
                 else
                 {
                     if(miCurrTempDegCx10 < (miSetValueDegCx10 - mainAbs(miContolDeadBandCx10)))
                     {
-                        // warm up
-                        plant_heat(true);
-                        plant_refrigirate(false);
-                        GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
-                        GpioDataRegs.GPASET.bit.LED_BLUE = 1;
-                        GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
-                        GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
+                        if(iControlDebounceCnt >= CONTROL_DEBOUNCE_TIME)
+                        {
+                            // warm up
+                            plant_heat(true);
+                            plant_refrigirate(false);
+                            GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                            GpioDataRegs.GPASET.bit.LED_BLUE = 1;
+                            GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
+                            GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
+                        }
+                        else
+                        {
+                            iControlDebounceCnt += 1;
+                        }
                     }
                     else
                     {
@@ -315,6 +331,7 @@ void mainStateMachine(void)
                         GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
                         GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
                         GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1;
+                        iControlDebounceCnt = 0;
                     }
                 }
             }
@@ -327,6 +344,7 @@ void mainStateMachine(void)
                 GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1; // LED is fixed to GND
                 GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
                 GpioDataRegs.GPECLEAR.bit.LED_ACTIVE = 1; // LED is fixed to GND
+                iControlDebounceCnt = CONTROL_DEBOUNCE_TIME; // don't debounce when activating
             }
             eState = S_CHECK_ADC;
         break;
