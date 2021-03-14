@@ -332,6 +332,11 @@ void mainStateMachine(void)
                         GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
                         GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1;
                         iControlDebounceCnt = 0;
+                        if(miCurrTempDegCx10 > (miSetValueDegCx10 - miMinDeadBandDegCx10) && miCurrTempDegCx10 < (miSetValueDegCx10 + miMinDeadBandDegCx10))
+                        {
+                            // measured value is within narrowest deadband: Apply narrowest deadband
+                            miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                        }
                     }
                 }
             }
