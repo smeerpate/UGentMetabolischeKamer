@@ -14,7 +14,7 @@
 #include "plant.h"
 
 //--- Macro's
-#define BUILD_INFO              14
+#define BUILD_INFO              20
 #define DEBOUNCE_TIME           1 // 10ms
 #define CONVERSION_TIME         6 // 60ms
 #define SETTEMPCX10_MIN         -300 // deg C * 10 (e.g. -300 => -30 deg C)
@@ -30,12 +30,16 @@ Uint16 DacOutput;                       // DAC output
 
 Uint16 LoopCount;
 Uint16 mawAdcMeasurements[2] = { 0 }; // initialize global buffer for ADC measurements
-int miSetValueDegCx10 = 150;
-int miCurrTempDegCx10 = 0;
-int miSettingTimeTempDeltaCx10 = 0;
-int miContolDeadBandCx10 = 10; // deg C * 10 (e.g. -300 => -30 deg C), temperature used while controlling the plant
-float mfDeltaFactor = 0.2;
-int miMinDeadBandDegCx10 = 2; // deg C * 10 (e.g. -300 => -30 deg C)
+int miSetValueDegCx10 = 150; // Temperature set by user
+int miCurrTempDegCx10 = 0; // Measured temperature by thermocouple inside chamber
+int miSettingTimeTempDeltaCx10 = 0; // Temperature difference between measured and target temperature at the time the user sets the temperature.
+int miContolDeadBandCx10 = 10; // deg C * 10 (e.g. 10 => 1 deg C), temperature used while controlling the plant
+float mfDeltaFactor = 0.2; // scaling factor for miSettingTimeTempDeltaCx10 (Temperature difference between measured and target temperature at the time the user sets the temperature.)
+int miMinDeadBandDegCx10 = 2; // deg C * 10 (e.g. 2 => 0.2 deg C)
+int miRefrigirateDeadBandOffsetCx10 = 0; // deg C * 10
+int miHeatDeadBandOffsetCx10 = 2; // deg C * 10 (e.g. 2 => 0.2 deg C)
+int miRefrigirateHeatDisableTempBandCx10 = 20; // deg C * 10 (e.g. 20 => 2.0 deg C)
+bool mbiTargetReached = false; // Indicates that the set target was reached for the first time
 bool mbiActive = false;
 
 //--- Enums
@@ -237,6 +241,7 @@ void mainStateMachine(void)
                                 {
                                     miContolDeadBandCx10 = miMinDeadBandDegCx10;
                                 }
+                                mbiTargetReached = false;
                                 break;
                             case 2:
                                 if(miSetValueDegCx10 > SETTEMPCX10_MIN)
@@ -249,6 +254,7 @@ void mainStateMachine(void)
                                 {
                                     miContolDeadBandCx10 = miMinDeadBandDegCx10;
                                 }
+                                mbiTargetReached = false;
                                 break;
                             case 4:
                                 if(mbiActive == true)
@@ -264,6 +270,7 @@ void mainStateMachine(void)
                                     {
                                         miContolDeadBandCx10 = miMinDeadBandDegCx10;
                                     }
+                                    mbiTargetReached = false;
                                 }
                             default:
                                 break;
@@ -286,16 +293,21 @@ void mainStateMachine(void)
             {
                 GpioDataRegs.GPESET.bit.LED_ACTIVE = 1; // LED is fixed to GND
 
-                if(miCurrTempDegCx10 > (miSetValueDegCx10 + mainAbs(miContolDeadBandCx10)))
+                if(miCurrTempDegCx10 > (miSetValueDegCx10 + mainAbs(miContolDeadBandCx10) + miRefrigirateDeadBandOffsetCx10))
                 {
                     if(iControlDebounceCnt >= CONTROL_DEBOUNCE_TIME)
                     {
                         // Cool down
-                        plant_refrigirate(true);
+                        if ((miSetValueDegCx10 < (TempSensor_CalculateChipTemp(mawAdcMeasurements[1])/10 + miRefrigirateHeatDisableTempBandCx10)) || !mbiTargetReached)
+                        {
+                            // Set temperature is lower than the ambient temperature.
+                            // We need to actively refrigerate to cool down.
+                            plant_refrigirate(true);
+                            GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                            GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
+                        }
                         plant_heat(false);
-                        GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
                         GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
-                        GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
                         GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
                     }
                     else
@@ -305,16 +317,21 @@ void mainStateMachine(void)
                 }
                 else
                 {
-                    if(miCurrTempDegCx10 < (miSetValueDegCx10 - mainAbs(miContolDeadBandCx10)))
+                    if(miCurrTempDegCx10 < (miSetValueDegCx10 - mainAbs(miContolDeadBandCx10) - miHeatDeadBandOffsetCx10))
                     {
                         if(iControlDebounceCnt >= CONTROL_DEBOUNCE_TIME)
                         {
                             // warm up
-                            plant_heat(true);
+                            if ((miSetValueDegCx10 > (TempSensor_CalculateChipTemp(mawAdcMeasurements[1])/10 - miRefrigirateHeatDisableTempBandCx10)) || !mbiTargetReached)
+                            {
+                                // Set temperature is higher than the ambient temperature.
+                                // We need to actively heat to warm up.
+                                plant_heat(true);
+                                GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
+                                GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                            }
                             plant_refrigirate(false);
-                            GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
                             GpioDataRegs.GPASET.bit.LED_BLUE = 1;
-                            GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
                             GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
                         }
                         else
@@ -324,18 +341,27 @@ void mainStateMachine(void)
                     }
                     else
                     {
-                        // idle
-                        plant_heat(false);
-                        plant_refrigirate(false);
-                        GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
-                        GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
-                        GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
-                        GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1;
-                        iControlDebounceCnt = 0;
-                        if(miCurrTempDegCx10 > (miSetValueDegCx10 - miMinDeadBandDegCx10) && miCurrTempDegCx10 < (miSetValueDegCx10 + miMinDeadBandDegCx10))
+                        if(iControlDebounceCnt <= 0)
                         {
-                            // measured value is within narrowest deadband: Apply narrowest deadband
-                            miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                            // idle
+                            plant_heat(false);
+                            plant_refrigirate(false);
+                            GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
+                            GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
+                            GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
+                            GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1;
+                            iControlDebounceCnt = 0;
+                            if(miCurrTempDegCx10 > (miSetValueDegCx10 - miMinDeadBandDegCx10) && miCurrTempDegCx10 < (miSetValueDegCx10 + miMinDeadBandDegCx10))
+                            {
+                                // measured value is within narrowest deadband: Apply narrowest deadband
+                                miContolDeadBandCx10 = miMinDeadBandDegCx10;
+                                // indicate that we have reached the set target temperature
+                                mbiTargetReached = true;
+                            }
+                        }
+                        else
+                        {
+                            iControlDebounceCnt -= 1;
                         }
                     }
                 }

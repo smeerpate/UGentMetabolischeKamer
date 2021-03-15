@@ -5,7 +5,6 @@
 #define TC_LUTENTRIES           9
 
 
-int TempSensor_CalculateChipTemp(uint16_t uiChipTempValueRaw);
 int TempSensor_KTcVoltToTemp(long fVoltageMicroV);
 long TempSensor_KTcTempToVolt(int iTempCx100);
 
