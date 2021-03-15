@@ -14,7 +14,7 @@
 #include "plant.h"
 
 //--- Macro's
-#define BUILD_INFO              20
+#define BUILD_INFO              21
 #define DEBOUNCE_TIME           1 // 10ms
 #define CONVERSION_TIME         6 // 60ms
 #define SETTEMPCX10_MIN         -300 // deg C * 10 (e.g. -300 => -30 deg C)
@@ -303,10 +303,10 @@ void mainStateMachine(void)
                             // Set temperature is lower than the ambient temperature.
                             // We need to actively refrigerate to cool down.
                             plant_refrigirate(true);
-                            GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
                             GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
                         }
                         plant_heat(false);
+                        GpioDataRegs.GPATOGGLE.bit.LED_BLUE = 1;
                         GpioDataRegs.GPBSET.bit.LED_RED = 1; // LED is fixed to VCC
                         GpioDataRegs.GPBCLEAR.bit.LED_HEAT = 1; // LED is fixed to GND
                     }
@@ -328,9 +328,9 @@ void mainStateMachine(void)
                                 // We need to actively heat to warm up.
                                 plant_heat(true);
                                 GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
-                                GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
                             }
                             plant_refrigirate(false);
+                            GpioDataRegs.GPBTOGGLE.bit.LED_RED = 1;
                             GpioDataRegs.GPASET.bit.LED_BLUE = 1;
                             GpioDataRegs.GPCCLEAR.bit.LED_COOL = 1;
                         }
