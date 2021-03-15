@@ -14,7 +14,7 @@
 #include "plant.h"
 
 //--- Macro's
-#define BUILD_INFO              22
+#define BUILD_INFO              23
 #define DEBOUNCE_TIME           1 // 10ms
 #define CONVERSION_TIME         6 // 60ms
 #define SETTEMPCX10_MIN         -300 // deg C * 10 (e.g. -300 => -30 deg C)
@@ -313,7 +313,7 @@ void mainStateMachine(void)
                     else
                     {
                         iControlDebounceCnt += 1;
-                        GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
+                        //GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
                     }
                 }
                 else
@@ -338,7 +338,7 @@ void mainStateMachine(void)
                         else
                         {
                             iControlDebounceCnt += 1;
-                            GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
+                            //GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
                         }
                     }
                     else
