@@ -14,7 +14,7 @@
 #include "plant.h"
 
 //--- Macro's
-#define BUILD_INFO              21
+#define BUILD_INFO              22
 #define DEBOUNCE_TIME           1 // 10ms
 #define CONVERSION_TIME         6 // 60ms
 #define SETTEMPCX10_MIN         -300 // deg C * 10 (e.g. -300 => -30 deg C)
@@ -34,10 +34,10 @@ int miSetValueDegCx10 = 150; // Temperature set by user
 int miCurrTempDegCx10 = 0; // Measured temperature by thermocouple inside chamber
 int miSettingTimeTempDeltaCx10 = 0; // Temperature difference between measured and target temperature at the time the user sets the temperature.
 int miContolDeadBandCx10 = 10; // deg C * 10 (e.g. 10 => 1 deg C), temperature used while controlling the plant
-float mfDeltaFactor = 0.2; // scaling factor for miSettingTimeTempDeltaCx10 (Temperature difference between measured and target temperature at the time the user sets the temperature.)
+float mfDeltaFactor = 0.15; // scaling factor for miSettingTimeTempDeltaCx10 (Temperature difference between measured and target temperature at the time the user sets the temperature.)
 int miMinDeadBandDegCx10 = 2; // deg C * 10 (e.g. 2 => 0.2 deg C)
 int miRefrigirateDeadBandOffsetCx10 = 0; // deg C * 10
-int miHeatDeadBandOffsetCx10 = 2; // deg C * 10 (e.g. 2 => 0.2 deg C)
+int miHeatDeadBandOffsetCx10 = 0; // deg C * 10 (e.g. 2 => 0.2 deg C)
 int miRefrigirateHeatDisableTempBandCx10 = 20; // deg C * 10 (e.g. 20 => 2.0 deg C)
 bool mbiTargetReached = false; // Indicates that the set target was reached for the first time
 bool mbiActive = false;
@@ -313,6 +313,7 @@ void mainStateMachine(void)
                     else
                     {
                         iControlDebounceCnt += 1;
+                        GpioDataRegs.GPCTOGGLE.bit.LED_COOL = 1;
                     }
                 }
                 else
@@ -337,6 +338,7 @@ void mainStateMachine(void)
                         else
                         {
                             iControlDebounceCnt += 1;
+                            GpioDataRegs.GPBTOGGLE.bit.LED_HEAT = 1;
                         }
                     }
                     else
