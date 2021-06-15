@@ -4,7 +4,7 @@
 
 SHELL = cmd.exe
 
-CG_TOOL_ROOT := D:/ti/ccs1010/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS
+CG_TOOL_ROOT := C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS
 
 GEN_OPTS__FLAG := 
 GEN_CMDS__FLAG := 
@@ -35,8 +35,12 @@ ORDERED_OBJS += \
 "./buttons.obj" \
 "./plant.obj" \
 "./sevenSegment.obj" \
-"../F2837xD_Headers_nonBIOS_cpu1.cmd" \
+"./Common/F2837xD_headers/source/F2837xD_GlobalVariableDefs.obj" \
 "../Lab_5_6_7.cmd" \
+"../Common/F2837xD_headers/cmd/F2837xD_Headers_BIOS_cpu1.cmd" \
+"../Common/F2837xD_headers/cmd/F2837xD_Headers_BIOS_cpu2.cmd" \
+"../Common/F2837xD_headers/cmd/F2837xD_Headers_nonBIOS_cpu1.cmd" \
+"../Common/F2837xD_headers/cmd/F2837xD_Headers_nonBIOS_cpu2.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
 
@@ -48,7 +52,11 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include Common/F2837xD_headers/cmd/subdir_vars.mk
+-include Common/F2837xD_headers/source/subdir_vars.mk
 -include subdir_rules.mk
+-include Common/F2837xD_headers/cmd/subdir_rules.mk
+-include Common/F2837xD_headers/source/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -165,22 +173,22 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 UGentMetabolischeKamer.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
-	"D:/ti/ccs1010/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla1 --float_support=fpu32 --tmu_support=tmu0 --vcu_support=vcu2 -O2 --diag_warning=225 --diag_wrap=off --display_error_number -z -m"UGentMetabolischeKamer.map" --stack_size=0x200 --warn_sections -i"D:/ti/ccs1010/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/lib" -i"D:/ti/ccs1010/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="UGentMetabolischeKamer_linkInfo.xml" --rom_model -o "UGentMetabolischeKamer.out" $(ORDERED_OBJS)
+	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/bin/cl2000" -v28 -ml -mt --cla_support=cla1 --float_support=fpu32 --tmu_support=tmu0 --vcu_support=vcu2 -O2 --diag_warning=225 --diag_wrap=off --display_error_number -z -m"UGentMetabolischeKamer.map" --stack_size=0x200 --warn_sections -i"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/lib" -i"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --xml_link_info="UGentMetabolischeKamer_linkInfo.xml" --rom_model -o "UGentMetabolischeKamer.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 UGentMetabolischeKamer.hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: C2000 Hex Utility'
-	"D:/ti/ccs1010/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/bin/hex2000" --diag_wrap=off -o "UGentMetabolischeKamer.hex" $(EXE_OUTPUTS__QUOTED)
+	"C:/ti/ccs1011/ccs/tools/compiler/ti-cgt-c2000_20.2.1.LTS/bin/hex2000"  -o "UGentMetabolischeKamer.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Adc.obj" "CodeStartBranch.obj" "Dac.obj" "DefaultIsr_6.obj" "Delay.obj" "DelayUs.obj" "EPwm_6.obj" "F2837xD_Adc.obj" "F2837xD_GlobalVariableDefs.obj" "FanSpin.obj" "Flash.obj" "Gpio.obj" "Main_6.obj" "PieCtrl.obj" "PieVect.obj" "SineTable.obj" "Spi.obj" "SysCtrl.obj" "TempSensor.obj" "Watchdog.obj" "Xbar.obj" "ads1120.obj" "buttons.obj" "plant.obj" "sevenSegment.obj" 
-	-$(RM) "Adc.d" "Dac.d" "DefaultIsr_6.d" "Delay.d" "EPwm_6.d" "F2837xD_Adc.d" "F2837xD_GlobalVariableDefs.d" "FanSpin.d" "Flash.d" "Gpio.d" "Main_6.d" "PieCtrl.d" "PieVect.d" "SineTable.d" "Spi.d" "SysCtrl.d" "TempSensor.d" "Watchdog.d" "Xbar.d" "ads1120.d" "buttons.d" "plant.d" "sevenSegment.d" 
+	-$(RM) "Adc.obj" "CodeStartBranch.obj" "Dac.obj" "DefaultIsr_6.obj" "Delay.obj" "DelayUs.obj" "EPwm_6.obj" "F2837xD_Adc.obj" "F2837xD_GlobalVariableDefs.obj" "FanSpin.obj" "Flash.obj" "Gpio.obj" "Main_6.obj" "PieCtrl.obj" "PieVect.obj" "SineTable.obj" "Spi.obj" "SysCtrl.obj" "TempSensor.obj" "Watchdog.obj" "Xbar.obj" "ads1120.obj" "buttons.obj" "plant.obj" "sevenSegment.obj" "Common\F2837xD_headers\source\F2837xD_GlobalVariableDefs.obj" 
+	-$(RM) "Adc.d" "Dac.d" "DefaultIsr_6.d" "Delay.d" "EPwm_6.d" "F2837xD_Adc.d" "F2837xD_GlobalVariableDefs.d" "FanSpin.d" "Flash.d" "Gpio.d" "Main_6.d" "PieCtrl.d" "PieVect.d" "SineTable.d" "Spi.d" "SysCtrl.d" "TempSensor.d" "Watchdog.d" "Xbar.d" "ads1120.d" "buttons.d" "plant.d" "sevenSegment.d" "Common\F2837xD_headers\source\F2837xD_GlobalVariableDefs.d" 
 	-$(RM) "CodeStartBranch.d" "DelayUs.d" 
 	-@echo 'Finished clean'
 	-@echo ' '

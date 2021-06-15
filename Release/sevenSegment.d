@@ -1,7 +1,7 @@
 # FIXED
 
 sevenSegment.obj: ../sevenSegment.c
-sevenSegment.obj: D:/ti/Workspace/UGentMetabolischeKamer/sevenSegment.h
+sevenSegment.obj: C:/Users/thijs/Documents/GitHub/UGentMetabolischeKamer/sevenSegment.h
 
 ../sevenSegment.c: 
-D:/ti/Workspace/UGentMetabolischeKamer/sevenSegment.h: 
+C:/Users/thijs/Documents/GitHub/UGentMetabolischeKamer/sevenSegment.h: 

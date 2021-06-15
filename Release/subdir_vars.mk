@@ -6,8 +6,10 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CMD_SRCS += \
-../F2837xD_Headers_nonBIOS_cpu1.cmd \
 ../Lab_5_6_7.cmd 
+
+OUT_SRCS += \
+../UGentMetabolischeKamer.out 
 
 ASM_SRCS += \
 ../CodeStartBranch.asm \
@@ -178,5 +180,8 @@ C_SRCS__QUOTED += \
 ASM_SRCS__QUOTED += \
 "../CodeStartBranch.asm" \
 "../DelayUs.asm" 
+
+OUT_SRCS__QUOTED += \
+"../UGentMetabolischeKamer.out" 
 
 

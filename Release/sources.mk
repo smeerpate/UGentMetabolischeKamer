@@ -112,4 +112,6 @@ PDE_DEPS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 . \
+Common/F2837xD_headers/cmd \
+Common/F2837xD_headers/source \
 
